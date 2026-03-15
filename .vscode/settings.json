@@ -1,0 +1,23 @@
+{
+  "cSpell.words": [
+    "firestore",
+    "fpdart",
+    "Maeda",
+    "Michinobu",
+    "notif",
+    "predeploy",
+    "pubspec",
+    "riverpod",
+    "Yukyu",
+    "yukyuchecker"
+  ],
+  "cSpell.ignorePaths": [
+    ".gitignore",
+    ".metadata",
+    "pubspec.lock",
+    "build/*",
+    ".dart_tool/*",
+    ".idea/*",
+    ".vscode/*"
+  ]
+}

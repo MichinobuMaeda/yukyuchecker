@@ -1,0 +1,17 @@
+{
+  "name": "yukyuchecker",
+  "version": "1.0.0",
+  "license": "BSD-3-Clause",
+  "author": "Michinobu Maeda",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichinobuMaeda/yukyuchecker.git"
+  },
+  "scripts": {
+    "build": "flutter build web --wasm",
+    "dev": "npx firebase emulators:exec 'flutter run'"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.10.0"
+  }
+}
