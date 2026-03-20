@@ -1,13 +1,19 @@
 {
   "cSpell.words": [
+    "EWNJZNW",
+    "firebaseapp",
+    "firebasestorage",
     "firestore",
     "fpdart",
     "Maeda",
     "Michinobu",
     "notif",
+    "nvmrc",
     "predeploy",
     "pubspec",
     "riverpod",
+    "SDUMRBV",
+    "subosito",
     "Yukyu",
     "yukyuchecker"
   ],
@@ -19,5 +25,6 @@
     ".dart_tool/*",
     ".idea/*",
     ".vscode/*"
-  ]
+  ],
+  "editor.formatOnSave": true
 }
