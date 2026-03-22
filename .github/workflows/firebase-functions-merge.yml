@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/firebase-functions-merge.yml
       - functions/**
+      - firebase.json
       - .nvmrc
 jobs:
   build_and_deploy:

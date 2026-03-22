@@ -8,9 +8,11 @@
     "url": "https://github.com/MichinobuMaeda/yukyuchecker.git"
   },
   "scripts": {
+    "lint:functions": "npm --prefix functions run lint",
+    "lint": "npm run lint:functions",
     "build:functions": "npm --prefix functions run build",
     "build:ui": "flutter build web --wasm",
-    "build": "npm run build:functions && npm run build:ui",
+    "build": "npm run lint && npm run build:functions && npm run build:ui",
     "dev:ui": "flutter run --dart-define=FLUTTER_ENV=development --web-port 8000",
     "dev": "npm run build:functions && npx firebase emulators:exec --only auth,functions,firestore --ui \"npm run dev:ui\""
   },

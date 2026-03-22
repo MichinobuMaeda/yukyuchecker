@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - .github/workflows/firebase-firestore-merge.yml
+      - firebase.json
       - firestore.rules
 jobs:
   build_and_deploy:
