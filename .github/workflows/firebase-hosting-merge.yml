@@ -21,7 +21,7 @@ jobs:
       - name: Set firebase api key
         run: |
           sed 's/FIREBASE_API_KEY/${{ secrets.FIREBASE_API_KEY_YUKYUCHECKER }}/' \
-            -i lib\firebase.dart
+            -i lib/firebase.dart
       - name: Install dependencies
         run: flutter pub get
       - name: Build web
