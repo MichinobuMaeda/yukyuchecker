@@ -22,7 +22,6 @@ jobs:
           WORK_DIR: ${{ runner.temp }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/service-account.json
         run: |
-          mkdir $WORK_DIR
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_YUKYUCHECKER }}' \
           > $GOOGLE_APPLICATION_CREDENTIALS
           npx firebase deploy --only firestore
