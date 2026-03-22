@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - .github\workflows\firebase-hosting-merge.yml
+      - .github/workflows/firebase-hosting-merge.yml
       - lib/**/*
       - web/**/*
       - pubspec.*
