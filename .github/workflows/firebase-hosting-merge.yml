@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - .github/workflows/firebase-hosting-merge.yml
+      - assets/**/*
       - lib/**/*
       - web/**/*
       - pubspec.*
@@ -13,7 +14,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -21,7 +22,7 @@ jobs:
       - name: Set firebase api key
         run: |
           sed 's/FIREBASE_API_KEY/${{ secrets.FIREBASE_API_KEY_YUKYUCHECKER }}/' \
-            -i lib/firebase.dart
+            -i lib/config/firebase.dart
       - name: Install dependencies
         run: flutter pub get
       - name: Build web

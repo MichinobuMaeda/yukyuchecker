@@ -56,7 +56,9 @@ describe("setup", () => {
   it("does nothing when data is undefined", async () => {
     const ctx = makeContext();
     await setup(ctx, {data: undefined});
-    expect(ctx.logger.info).toHaveBeenCalledWith("Setting up for version", 0);
+    expect(ctx.logger.info).toHaveBeenCalledWith(
+      "No version document found, skipping setup"
+    );
   });
 
   it("does nothing when version >= 1", async () => {
@@ -64,6 +66,17 @@ describe("setup", () => {
     const data = makeDocSnapshot({version: 1});
     await setup(ctx, {data});
     expect(ctx.auth.createUser).not.toHaveBeenCalled();
+  });
+
+  it("defaults missing version to 0 and runs setupV1", async () => {
+    const ctx = makeContext();
+    const data = makeDocSnapshot({email: "admin@example.com"});
+    await setup(ctx, {data});
+    expect(ctx.logger.info).toHaveBeenCalledWith("Setting up for version", 0);
+    expect(ctx.auth.createUser).toHaveBeenCalledWith({
+      email: "admin@example.com",
+    });
+    expect(ctx.db.batch().commit).toHaveBeenCalled();
   });
 
   it("calls setupV1 when version is 0", async () => {

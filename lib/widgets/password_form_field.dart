@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+import '../services/validators.dart';
+
+class PasswordFormField extends HookWidget {
+  const PasswordFormField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.helperText,
+    this.validator,
+  });
+
+  final TextEditingController controller;
+  final String labelText;
+  final String helperText;
+  final String? Function(String?)? validator;
+
+  @override
+  Widget build(BuildContext context) {
+    final isVisible = useState(false);
+
+    return TextFormField(
+      controller: controller,
+      obscureText: !isVisible.value,
+      validator: validator ?? (value) => validateRequiredPassword(value ?? ''),
+      decoration: InputDecoration(
+        labelText: labelText,
+        helperText: helperText,
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: Icon(isVisible.value ? Icons.visibility_off : Icons.visibility),
+          onPressed: () {
+            isVisible.value = !isVisible.value;
+          },
+        ),
+      ),
+    );
+  }
+}

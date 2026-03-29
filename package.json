@@ -10,11 +10,17 @@
   "scripts": {
     "lint:functions": "npm --prefix functions run lint",
     "lint": "npm run lint:functions",
+    "build:ui:splash": "dart run flutter_native_splash:create",
     "build:functions": "npm --prefix functions run build",
-    "build:ui": "flutter build web --wasm",
+    "build:ui:version": "dart tools/set_ui_version.dart",
+    "build:ui": "npm run build:ui:version && flutter build web --wasm",
     "build": "npm run lint && npm run build:functions && npm run build:ui",
-    "dev:ui": "flutter run --dart-define=FLUTTER_ENV=development --web-port 8000",
-    "dev": "npm run build:functions && npx firebase emulators:exec --only auth,functions,firestore --ui \"npm run dev:ui\""
+    "dev:ui": "flutter run --dart-define=FLUTTER_ENV=development --web-port 8000 -d",
+    "test:emulate": "npx firebase emulators:exec --only auth,functions,firestore --ui --import test/emulators",
+    "test:data": "npx firebase firestore:delete -f service/version",
+    "dev": "npm run build:functions && npm run test:emulate -- \"npm run test:data && npm run dev:ui -- web-server\"",
+    "dev:chrome": "npm run build:functions && npm run test:emulate -- \"npm run test:data && npm run dev:ui -- chrome\"",
+    "dev:edge": "npm run build:functions && npm run test:emulate -- \"npm run test:data && npm run dev:ui -- edge\""
   },
   "devDependencies": {
     "firebase-tools": "^15.10.0"

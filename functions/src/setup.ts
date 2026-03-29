@@ -28,10 +28,12 @@ async function setupV1(
     db.collection("service").doc("conf"),
     {
       admins: [user.uid],
-      holidays: [],
       createdAt: new Date(),
     }
   );
+  batch.set(db.collection("users").doc(user.uid), {
+    createdAt: new Date(),
+  });
   batch.set(db.collection("service").doc("version"), {version: 1});
   await batch.commit();
 }

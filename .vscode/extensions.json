@@ -2,6 +2,7 @@
   "recommendations": [
     "dart-code.dart-code",
     "dart-code.flutter",
+    "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "github.vscode-github-actions",
     "streetsidesoftware.code-spell-checker"

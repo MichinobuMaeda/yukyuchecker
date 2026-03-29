@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "Eventarc",
     "EWNJZNW",
     "firebaseapp",
     "firebasestorage",
@@ -8,9 +9,13 @@
     "Maeda",
     "Michinobu",
     "notif",
+    "Noto",
     "nvmrc",
     "predeploy",
+    "prefs",
     "pubspec",
+    "reauthenticating",
+    "Reauthentication",
     "riverpod",
     "SDUMRBV",
     "subosito",
@@ -28,7 +33,7 @@
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "always"
   },
   "eslint.format.enable": true,
   "eslint.validate": [
