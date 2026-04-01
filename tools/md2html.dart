@@ -1,0 +1,192 @@
+import 'dart:io';
+import 'package:markdown/markdown.dart' as md;
+
+void main() {
+  final docsDir = Directory('docs');
+  if (!docsDir.existsSync()) {
+    stderr.writeln('Error: docs directory not found.');
+    exitCode = 1;
+    return;
+  }
+
+  final mdFiles = docsDir
+      .listSync()
+      .whereType<File>()
+      .where((f) => f.path.endsWith('.md'))
+      .toList();
+
+  if (mdFiles.isEmpty) {
+    stderr.writeln('No Markdown files found in docs directory.');
+    exitCode = 1;
+    return;
+  }
+
+  for (final file in mdFiles) {
+    try {
+      final markdown = file.readAsStringSync();
+      final html = md.markdownToHtml(markdown);
+      final htmlPath = file.path.replaceAll('.md', '.html');
+      final htmlContent = _wrapHtml(file.uri.pathSegments.last, html);
+      File(htmlPath).writeAsStringSync(htmlContent);
+      stdout.writeln('Generated: $htmlPath');
+    } catch (e) {
+      stderr.writeln('Error processing ${file.path}: $e');
+      exitCode = 1;
+    }
+  }
+
+  stdout.writeln('✓ All Markdown files converted to HTML');
+}
+
+String _wrapHtml(String title, String body) {
+  return '''<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>$title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      padding: 40px 20px;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 0.3em;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #007acc;
+      margin-top: 2em;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      color: #0066cc;
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    ul, ol {
+      margin: 1em 0 1em 2em;
+    }
+
+    li {
+      margin-bottom: 0.5em;
+    }
+
+    a {
+      color: #007acc;
+      text-decoration: none;
+      border-bottom: 1px dotted #007acc;
+    }
+
+    a:hover {
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: #f4f4f4;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 1em;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin: 1em 0;
+      border-left: 3px solid #007acc;
+    }
+
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding-left: 1em;
+      margin: 1em 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.75em;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+      font-weight: 600;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 1em 0;
+      border-radius: 5px;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 2em 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    $body
+  </main>
+</body>
+</html>
+''';
+}
