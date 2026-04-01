@@ -1,11 +1,11 @@
 {
-  "name": "Yukyu Checker",
-  "short_name": "Yukyu Checker",
+  "name": "有休チェッカー",
+  "short_name": "有休チェッカー",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
+  "description": "有休チェッカーアプリ",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [
