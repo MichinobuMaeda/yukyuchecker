@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../config/theme.dart';
 import '../../services/models.dart';
 import '../../services/authentication.dart';
+import '../../widgets/box_panel.dart';
 
 const _aboutAccountDeletion = 'アカウントを削除するとすべてのデータが失われ、元に戻すことができません。';
 const _confirmAccountDeletion = '本当にアカウントを削除しますか？';
@@ -37,67 +39,37 @@ class DeleteUserPanel extends HookConsumerWidget {
       }
     }
 
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Flex(
-          direction: Axis.vertical,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16.0,
-          children: confirm.value
-              ? [
-                  Text(_aboutAccountDeletion),
-                  Text(_confirmAccountDeletion),
-                  Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 16.0,
-                    runSpacing: 16.0,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => confirm.value = false,
-                        child: Text("キャンセル"),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          confirm.value = false;
-                          showBottomSheet(
-                            context: context,
-                            builder: (context) => _ConfirmationSheet(
-                              onCancel: () => Navigator.pop(context),
-                              onConfirm: () {
-                                Navigator.pop(context);
-                                handleSubmit();
-                              },
-                            ),
-                          );
-                        },
-                        style: FilledButton.styleFrom(
-                          foregroundColor: Theme.of(
-                            context,
-                          ).colorScheme.onError,
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.delete),
-                            SizedBox(width: 8),
-                            Text("アカウント削除"),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ]
-              : [
-                  Text(_aboutAccountDeletion),
+    return BoxPanel(
+      children: confirm.value
+          ? [
+              Text(_aboutAccountDeletion),
+              Text(_confirmAccountDeletion),
+              Wrap(
+                direction: Axis.horizontal,
+                spacing: panelSpacing,
+                runSpacing: panelSpacing,
+                children: [
                   OutlinedButton(
-                    onPressed: () => confirm.value = true,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.error,
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
+                    onPressed: () => confirm.value = false,
+                    child: Text("キャンセル"),
+                  ),
+                  FilledButton(
+                    onPressed: () {
+                      confirm.value = false;
+                      showBottomSheet(
+                        context: context,
+                        builder: (context) => _ConfirmationSheet(
+                          onCancel: () => Navigator.pop(context),
+                          onConfirm: () {
+                            Navigator.pop(context);
+                            handleSubmit();
+                          },
+                        ),
+                      );
+                    },
+                    style: FilledButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -109,8 +81,26 @@ class DeleteUserPanel extends HookConsumerWidget {
                     ),
                   ),
                 ],
-        ),
-      ),
+              ),
+            ]
+          : [
+              Text(_aboutAccountDeletion),
+              OutlinedButton(
+                onPressed: () => confirm.value = true,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.error,
+                  side: BorderSide(color: Theme.of(context).colorScheme.error),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.delete),
+                    SizedBox(width: 8),
+                    Text("アカウント削除"),
+                  ],
+                ),
+              ),
+            ],
     );
   }
 }
@@ -124,19 +114,19 @@ class _ConfirmationSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: bottomSheetPadding,
       child: Flex(
         direction: Axis.vertical,
         mainAxisSize: MainAxisSize.min,
-        spacing: 16.0,
+        spacing: panelSpacing,
         children: [
           Text(_aboutAccountDeletion),
           Divider(),
           Text(_confirmAccountDeletion),
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: 16.0,
-            runSpacing: 16.0,
+            spacing: panelSpacing,
+            runSpacing: panelSpacing,
             children: [
               OutlinedButton(onPressed: onCancel, child: Text('キャンセル')),
               FilledButton(

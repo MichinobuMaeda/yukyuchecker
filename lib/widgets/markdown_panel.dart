@@ -7,6 +7,9 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/theme.dart';
+import 'box_panel.dart';
+
+const loadingIndicatorSize = 48.0;
 
 final markdownStyle = MarkdownStyleSheet(
   p: TextStyle(fontFamily: defaultFont),
@@ -45,10 +48,9 @@ class MarkdownPanel extends HookConsumerWidget {
       color: Theme.of(context).colorScheme.error,
     );
 
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: switch (source.connectionState) {
+    return BoxPanel(
+      children: [
+        switch (source.connectionState) {
           ConnectionState.done when source.hasData => MarkdownBody(
             styleSheet: markdownStyle,
             selectable: true,
@@ -77,13 +79,16 @@ class MarkdownPanel extends HookConsumerWidget {
           ),
           _ => const Center(
             child: CircularProgressIndicator(
-              constraints: BoxConstraints(maxHeight: 48.0, maxWidth: 48.0),
+              constraints: BoxConstraints(
+                maxHeight: loadingIndicatorSize,
+                maxWidth: loadingIndicatorSize,
+              ),
               // ignore: deprecated_member_use
               year2023: true,
             ),
           ),
         },
-      ),
+      ],
     );
   }
 }

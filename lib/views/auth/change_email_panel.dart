@@ -3,9 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/firebase.dart';
+import '../../config/theme.dart';
 import '../../services/helpers.dart';
 import '../../services/validators.dart';
 import '../../services/authentication.dart';
+import '../../widgets/box_panel.dart';
 
 class ChangeEmailPanel extends HookConsumerWidget {
   const ChangeEmailPanel({super.key});
@@ -31,76 +33,62 @@ class ChangeEmailPanel extends HookConsumerWidget {
       );
     }
 
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Flex(
-          direction: Axis.vertical,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16.0,
-          children: <Widget>[
-            Text("メールアドレスを変更する"),
-            Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: () {
-                isFormValid.value = formKey.currentState?.validate() ?? false;
-              },
-              child: Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 16.0,
-                runSpacing: 16.0,
-                children: <Widget>[
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 512),
-                    child: TextFormField(
-                      controller: email,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) =>
-                          validateRequiredEmail(value?.trim() ?? ''),
-                      decoration: InputDecoration(
-                        labelText: "メールアドレス",
-                        helperText: "メールアドレスを入力してください",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+    return BoxPanel(
+      children: [
+        Text("メールアドレスを変更する"),
+        Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: () {
+            isFormValid.value = formKey.currentState?.validate() ?? false;
+          },
+          child: Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: panelSpacing,
+            runSpacing: panelSpacing,
+            children: <Widget>[
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: defaultInputWidth),
+                child: TextFormField(
+                  controller: email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) =>
+                      validateRequiredEmail(value?.trim() ?? ''),
+                  decoration: InputDecoration(
+                    labelText: "メールアドレス",
+                    helperText: "メールアドレスを入力してください",
+                    border: OutlineInputBorder(),
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 512),
-                    child: TextFormField(
-                      controller: confirmEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) => validateConfirmation(
-                        email.text.trim(),
-                        value?.trim(),
-                      ),
-                      decoration: InputDecoration(
-                        labelText: "メールアドレス（確認）",
-                        helperText: "確認のため同じメールアドレスを入力してください",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: isFormValid.value ? () => handleSubmit() : null,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.send),
-                        SizedBox(width: 8),
-                        Text("送信"),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-            Text("【注意】 $emailFrom からのメールが受信できるようにしてください。"),
-          ],
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: defaultInputWidth),
+                child: TextFormField(
+                  controller: confirmEmail,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) =>
+                      validateConfirmation(email.text.trim(), value?.trim()),
+                  decoration: InputDecoration(
+                    labelText: "メールアドレス（確認）",
+                    helperText: "確認のため同じメールアドレスを入力してください",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              FilledButton(
+                onPressed: isFormValid.value ? () => handleSubmit() : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [Icon(Icons.send), SizedBox(width: 8), Text("送信")],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+        Text("【注意】 $emailFrom からのメールが受信できるようにしてください。"),
+      ],
     );
   }
 }

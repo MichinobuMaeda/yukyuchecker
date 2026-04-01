@@ -54,29 +54,29 @@ Future<void> handleEmailLink() async {
   }
 }
 
-Future<void> handleGoogleAuthRedirect() async {
-  try {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    final result = await FirebaseAuth.instance.getRedirectResult();
+// Future<void> handleGoogleAuthRedirect() async {
+//   try {
+//     final currentUser = FirebaseAuth.instance.currentUser;
+//     final result = await FirebaseAuth.instance.getRedirectResult();
 
-    if (currentUser != null && result.credential != null) {
-      debugPrint('Reauthenticating user with Google credentials.');
-      await currentUser.reload();
-      await currentUser.reauthenticateWithCredential(result.credential!);
-    }
+//     if (currentUser != null && result.credential != null) {
+//       debugPrint('Reauthenticating user with Google credentials.');
+//       await currentUser.reload();
+//       await currentUser.reauthenticateWithCredential(result.credential!);
+//     }
 
-    if (result.user != null) {
-      final redirectUrl = getBaseUrl(Uri.base.toString());
-      debugPrint('Launching URL without query string: $redirectUrl');
-      await launchUrl(Uri.parse(redirectUrl), webOnlyWindowName: '_self');
-    }
-  } catch (error, stackTrace) {
-    debugPrintStack(
-      label: 'Error handling Google auth redirect: $error',
-      stackTrace: stackTrace,
-    );
-  }
-}
+//     if (result.user != null) {
+//       final redirectUrl = getBaseUrl(Uri.base.toString());
+//       debugPrint('Launching URL without query string: $redirectUrl');
+//       await launchUrl(Uri.parse(redirectUrl), webOnlyWindowName: '_self');
+//     }
+//   } catch (error, stackTrace) {
+//     debugPrintStack(
+//       label: 'Error handling Google auth redirect: $error',
+//       stackTrace: stackTrace,
+//     );
+//   }
+// }
 
 Future<Either<String, Unit>> sendSignInLinkToEmail(String email) async {
   try {
@@ -144,7 +144,8 @@ Future<Either<String, Unit>> signInWithGoogle() async {
     googleProvider.addScope(
       'https://www.googleapis.com/auth/contacts.readonly',
     );
-    await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    await FirebaseAuth.instance.signInWithPopup(googleProvider);
     return right(unit);
   } catch (error, stackTrace) {
     debugPrintStack(
@@ -200,7 +201,8 @@ Future<Either<String, Unit>> reauthenticateWithGoogle() async {
       return left('No authenticated user.');
     }
     final googleProvider = GoogleAuthProvider();
-    await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // await user.reauthenticateWithRedirect(googleProvider);
+    await user.reauthenticateWithPopup(googleProvider);
     return right(unit);
   } catch (error, stackTrace) {
     debugPrintStack(

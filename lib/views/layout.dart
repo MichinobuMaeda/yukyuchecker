@@ -58,38 +58,16 @@ class Layout extends HookConsumerWidget {
         child: Row(
           children: [
             if (media() == MediaSize.middle)
-              NavigationRail(
-                labelType: NavigationRailLabelType.all,
-                destinations: pages
-                    .map(
-                      (item) => NavigationRailDestination(
-                        icon: Icon(item.icon),
-                        label: Text(item.label),
-                      ),
-                    )
-                    .toList(),
+              _NavRail(
+                pages: pages,
                 selectedIndex: selectedIndex.value,
                 onDestinationSelected: onDestinationSelected,
               ),
             if (media() == MediaSize.wide)
-              SizedBox(
-                width: navDrawerWidth,
-                child: NavigationDrawer(
-                  selectedIndex: selectedIndex.value,
-                  onDestinationSelected: onDestinationSelected,
-                  header: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Image.asset(assetAppLogo),
-                  ),
-                  children: pages
-                      .map(
-                        (item) => NavigationDrawerDestination(
-                          icon: Icon(item.icon),
-                          label: Text(item.label),
-                        ),
-                      )
-                      .toList(),
-                ),
+              _NavDrawer(
+                pages: pages,
+                selectedIndex: selectedIndex.value,
+                onDestinationSelected: onDestinationSelected,
               ),
             Expanded(
               child: Align(
@@ -98,13 +76,7 @@ class Layout extends HookConsumerWidget {
                   constraints: const BoxConstraints(maxWidth: contentMaxWidth),
                   child: CustomScrollView(
                     slivers: [
-                      if (media() != MediaSize.wide)
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Image.asset(assetAppLogo, height: 48.0),
-                          ),
-                        ),
+                      if (media() != MediaSize.wide) const _Header(),
                       ...selectedPage.value.contents,
                       const _Footer(),
                     ],
@@ -116,20 +88,26 @@ class Layout extends HookConsumerWidget {
         ),
       ),
       bottomNavigationBar: media() == MediaSize.narrow
-          ? NavigationBar(
-              destinations: pages
-                  .map(
-                    (item) => NavigationDestination(
-                      icon: Icon(item.icon),
-                      label: item.label,
-                    ),
-                  )
-                  .toList(),
-
+          ? _NavBar(
+              pages: pages,
               selectedIndex: selectedIndex.value,
               onDestinationSelected: onDestinationSelected,
             )
           : null,
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Image.asset(assetAppLogo, height: 48.0),
+      ),
     );
   }
 }
@@ -142,12 +120,99 @@ class _Footer extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Flex(
-          direction: Axis.vertical,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Divider(), Text('yukyuchecker $packageVersion')],
-        ),
+        child: Flexible(child: Text('yukyuchecker $packageVersion')),
       ),
+    );
+  }
+}
+
+class _NavDrawer extends StatelessWidget {
+  const _NavDrawer({
+    required this.pages,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+  });
+
+  final List<PageItem> pages;
+  final int selectedIndex;
+  final void Function(int) onDestinationSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: navDrawerWidth,
+      child: NavigationDrawer(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: onDestinationSelected,
+        header: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Image.asset(assetAppLogo),
+        ),
+        children: pages
+            .map(
+              (item) => NavigationDrawerDestination(
+                icon: Icon(item.icon),
+                label: Text(item.label),
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+}
+
+class _NavRail extends StatelessWidget {
+  const _NavRail({
+    required this.pages,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+  });
+
+  final List<PageItem> pages;
+  final int selectedIndex;
+  final void Function(int) onDestinationSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigationRail(
+      labelType: NavigationRailLabelType.all,
+      destinations: pages
+          .map(
+            (item) => NavigationRailDestination(
+              icon: Icon(item.icon),
+              label: Text(item.label),
+            ),
+          )
+          .toList(),
+      selectedIndex: selectedIndex,
+      onDestinationSelected: onDestinationSelected,
+    );
+  }
+}
+
+class _NavBar extends StatelessWidget {
+  const _NavBar({
+    required this.pages,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+  });
+
+  final List<PageItem> pages;
+  final int selectedIndex;
+  final void Function(int) onDestinationSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigationBar(
+      destinations: pages
+          .map(
+            (item) =>
+                NavigationDestination(icon: Icon(item.icon), label: item.label),
+          )
+          .toList(),
+
+      selectedIndex: selectedIndex,
+      onDestinationSelected: onDestinationSelected,
     );
   }
 }

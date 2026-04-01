@@ -6,6 +6,10 @@ const defaultFont = 'NotoSansJP';
 const navDrawerWidth = 256.0;
 const contentMaxWidth = 1024.0;
 const buttonHeight = 48.0;
+const panelPadding = EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0);
+const bottomSheetPadding = EdgeInsets.all(16.0);
+const panelSpacing = 16.0;
+const defaultInputWidth = 512.0;
 
 ThemeData generateThemeData(Brightness brightness) {
   final colorScheme = ColorScheme.fromSeed(

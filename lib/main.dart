@@ -9,7 +9,7 @@ import 'views/layout.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeFirebase();
-  await handleGoogleAuthRedirect();
+  // await handleGoogleAuthRedirect();
   await handleEmailLink();
   runApp(const ProviderScope(child: MyApp()));
 }

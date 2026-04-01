@@ -11,25 +11,22 @@ import '../views/auth/reset_password_panel.dart';
 import '../views/auth/sign_out_panel.dart';
 import '../views/auth/password_reauthenticate_panel.dart';
 import '../views/auth/change_email_panel.dart';
+import '../views/auth/google_auth_panel.dart';
 import '../views/auth/delete_user_panel.dart';
 
 enum Privilege { loading, guest, admin, user }
 
-const hr = SliverToBoxAdapter(child: Divider());
-
-enum Page {
+enum PageItem {
   guest(
     icon: Icons.login,
     label: '利用開始',
     privileges: [Privilege.guest],
     contents: [
       MarkdownPanel(asset: assetGuestMd),
-      hr,
       EmailLinkPanel(),
-      hr,
       EmailPasswordPanel(),
-      hr,
       ResetPasswordPanel(),
+      GoogleAuthPanel(),
     ],
   ),
   home(
@@ -44,17 +41,12 @@ enum Page {
     privileges: [Privilege.user, Privilege.admin],
     contents: [
       ResetPasswordPanel(),
-      hr,
       SignOutPanel(),
-      hr,
       MarkdownPanel(asset: assetReauthenticateMd),
-      hr,
       EmailLinkPanel(),
-      hr,
       PasswordReauthenticatePanel(),
-      hr,
+      GoogleAuthPanel(reauthentication: true),
       ChangeEmailPanel(),
-      hr,
       DeleteUserPanel(),
     ],
   ),
@@ -71,7 +63,7 @@ enum Page {
     contents: [MarkdownPanel(asset: assetInfoMd)],
   );
 
-  const Page({
+  const PageItem({
     required this.icon,
     required this.label,
     required this.privileges,
@@ -85,7 +77,7 @@ enum Page {
 }
 
 class NavItem {
-  final Page page;
+  final PageItem page;
   final IconData icon;
   final String label;
   final List<Privilege> privileges;
@@ -116,9 +108,9 @@ final privilegeProvider = Provider<Privilege>((ref) {
                         : Privilege.user)));
 });
 
-final pagesProvider = Provider<List<Page>>((ref) {
+final pagesProvider = Provider<List<PageItem>>((ref) {
   final privilege = ref.watch(privilegeProvider);
-  return Page.values
+  return PageItem.values
       .where((item) => item.privileges.contains(privilege))
       .toList();
 });
