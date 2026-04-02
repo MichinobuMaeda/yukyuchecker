@@ -1,15 +1,17 @@
-# Development
+# 有休チェッカー
 
-[« README](../README.md)
+[« 概要](./index.md)
 
-## Prerequisites
+## Development
+
+### Prerequisites
 
 - Git
 - Flutter >= 3.41.5
 - Node.js >= 24
 - Java >= JDK 11
 
-## Get started
+### Get started
 
 ```bash
 git clone git@github.com:MichinobuMaeda/yukyuchecker.git
@@ -22,3 +24,5 @@ num run dev
 
 - http://localhost:8000/ -- Web Server in debug mode
 - http://localhost:4000/ -- Firebase Emulator Suite UI
+
+[» Deployment](./deployment.md)

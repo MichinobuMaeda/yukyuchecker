@@ -1,3 +1,7 @@
+# 有休チェッカー
+
+[« 概要](https://pages.michinobu.jp/yukyuchecker/index.html)
+
 ## 利用規約
 
 有休チェッカーは以下の条件により無料で利用できます。

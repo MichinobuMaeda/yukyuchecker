@@ -1,10 +1,12 @@
-# Deployment
+# 有休チェッカー
 
-[« README](../README.md)
+[« 概要](./index.md) [« Development](./development.md)
+
+## Deployment
 
 - Firebase Console
     - Settings
-        -  Usage and billing
+        - Usage and billing
             - Details & settings
                 - Firebase billing plan
                     - Modify plan: 'Blaze'
