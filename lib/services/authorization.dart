@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'helpers.dart';
 import 'authentication.dart';
-import 'models.dart';
-import '../widgets/markdown_panel.dart';
+import '../models/conf.dart';
 import '../views/auth/email_link_panel.dart';
 import '../views/auth/email_password_panel.dart';
 import '../views/auth/reset_password_panel.dart';
@@ -13,6 +12,8 @@ import '../views/auth/password_reauthenticate_panel.dart';
 import '../views/auth/change_email_panel.dart';
 import '../views/auth/google_auth_panel.dart';
 import '../views/auth/delete_user_panel.dart';
+import '../views/admin/holidays_panel.dart';
+import '../widgets/markdown_panel.dart';
 
 enum Privilege { loading, guest, admin, user }
 
@@ -54,7 +55,7 @@ enum PageItem {
     icon: Icons.admin_panel_settings,
     label: '管理',
     privileges: [Privilege.admin],
-    contents: [SliverToBoxAdapter(child: Text('Admin'))],
+    contents: [HolidaysPanel()],
   ),
   info(
     icon: Icons.info,
@@ -93,19 +94,17 @@ class NavItem {
 }
 
 final privilegeProvider = Provider<Privilege>((ref) {
-  final userRef = ref.watch(authUserProvider);
-  final user = userRef.asData?.value;
+  final authUser = ref.watch(authUserProvider);
   final conf = ref.watch(confProvider);
+  final admins = ref.watch(adminsProvider);
 
-  return userRef.isLoading
+  return authUser.isLoading || conf.isLoading
       ? Privilege.loading
-      : ((user == null)
+      : ((authUser.asData?.value == null)
             ? Privilege.guest
-            : (conf == null
-                  ? Privilege.loading
-                  : (conf.get('admins').contains(user.uid)
-                        ? Privilege.admin
-                        : Privilege.user)));
+            : (admins.contains(authUser.asData!.value!.uid)
+                  ? Privilege.admin
+                  : Privilege.user));
 });
 
 final pagesProvider = Provider<List<PageItem>>((ref) {

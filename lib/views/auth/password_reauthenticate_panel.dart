@@ -37,13 +37,8 @@ class PasswordReauthenticatePanel extends HookConsumerWidget {
       password.value = TextEditingValue.empty;
       final result = await reauthenticateWithPassword(authUser!.email!, value);
       result.match(
-        (error) {
-          debugPrint('Error reauthenticating with password: $error');
-          message.show("再認証に失敗しました。");
-        },
-        (_) {
-          message.show("再認証に成功しました。");
-        },
+        (error) => message.show("再認証に失敗しました。"),
+        (_) => message.show("再認証に成功しました。"),
       );
     }
 

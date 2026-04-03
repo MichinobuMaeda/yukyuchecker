@@ -23,13 +23,8 @@ class ResetPasswordPanel extends HookConsumerWidget {
     Future<void> handleSubmit() async {
       final result = await sendPasswordResetEmail(email.text.trim());
       result.match(
-        (error) {
-          debugPrint('Error sending password reset email: $error');
-          message.show("パスワード設定用のリンクの送信に失敗しました。");
-        },
-        (_) {
-          message.show("パスワード設定用のリンクを送信しました。");
-        },
+        (error) => message.show("パスワード設定用のリンクの送信に失敗しました。"),
+        (_) => message.show("パスワード設定用のリンクを送信しました。"),
       );
     }
 

@@ -24,13 +24,8 @@ class EmailLinkPanel extends HookConsumerWidget {
       message.clear();
       final result = await sendSignInLinkToEmail(email.text.trim());
       result.match(
-        (error) {
-          debugPrint('Error sending sign-in link: $error');
-          message.show("ログイン用のリンクの送信に失敗しました。");
-        },
-        (_) {
-          message.show("ログイン用のリンクを送信しました。");
-        },
+        (error) => message.show("ログイン用のリンクの送信に失敗しました。"),
+        (_) => message.show("ログイン用のリンクを送信しました。"),
       );
     }
 

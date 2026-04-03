@@ -120,7 +120,7 @@ class _Footer extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Flexible(child: Text('yukyuchecker $packageVersion')),
+        child: Text('yukyuchecker $packageVersion'),
       ),
     );
   }

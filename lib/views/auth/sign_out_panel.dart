@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/theme.dart';
 import '../../services/authentication.dart';
+import '../../services/helpers.dart';
 import '../../widgets/box_panel.dart';
 
 class SignOutPanel extends HookConsumerWidget {
@@ -11,13 +12,14 @@ class SignOutPanel extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final message = ref.read(snackBarMessageProvider.notifier);
     final confirm = useState(false);
 
     Future<void> handleSubmit() async {
       final result = await signOut();
       result.match(
-        (error) => debugPrint('Error signing out: $error'),
-        (_) => debugPrint('Signed out successfully'),
+        (error) => message.show("ログアウトに失敗しました。"),
+        (_) => message.show("ログアウトに成功しました。"),
       );
     }
 

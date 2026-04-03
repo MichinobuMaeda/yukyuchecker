@@ -54,30 +54,6 @@ Future<void> handleEmailLink() async {
   }
 }
 
-// Future<void> handleGoogleAuthRedirect() async {
-//   try {
-//     final currentUser = FirebaseAuth.instance.currentUser;
-//     final result = await FirebaseAuth.instance.getRedirectResult();
-
-//     if (currentUser != null && result.credential != null) {
-//       debugPrint('Reauthenticating user with Google credentials.');
-//       await currentUser.reload();
-//       await currentUser.reauthenticateWithCredential(result.credential!);
-//     }
-
-//     if (result.user != null) {
-//       final redirectUrl = getBaseUrl(Uri.base.toString());
-//       debugPrint('Launching URL without query string: $redirectUrl');
-//       await launchUrl(Uri.parse(redirectUrl), webOnlyWindowName: '_self');
-//     }
-//   } catch (error, stackTrace) {
-//     debugPrintStack(
-//       label: 'Error handling Google auth redirect: $error',
-//       stackTrace: stackTrace,
-//     );
-//   }
-// }
-
 Future<Either<String, Unit>> sendSignInLinkToEmail(String email) async {
   try {
     await FirebaseAuth.instance.sendSignInLinkToEmail(
@@ -95,7 +71,7 @@ Future<Either<String, Unit>> sendSignInLinkToEmail(String email) async {
       label: 'Error sending sign-in link: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to send sign-in link: $error');
+    return left('$error');
   }
 }
 
@@ -114,7 +90,7 @@ Future<Either<String, Unit>> sendPasswordResetEmail(String? email) async {
       label: 'Error sending password reset email: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to send password reset email: $error');
+    return left('$error');
   }
 }
 
@@ -133,7 +109,7 @@ Future<Either<String, Unit>> signInWithEmailAndPassword(
       label: 'Error signing in with email and password: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to sign in with email and password: $error');
+    return left('$error');
   }
 }
 
@@ -144,7 +120,6 @@ Future<Either<String, Unit>> signInWithGoogle() async {
     googleProvider.addScope(
       'https://www.googleapis.com/auth/contacts.readonly',
     );
-    // await FirebaseAuth.instance.signInWithRedirect(googleProvider);
     await FirebaseAuth.instance.signInWithPopup(googleProvider);
     return right(unit);
   } catch (error, stackTrace) {
@@ -152,7 +127,7 @@ Future<Either<String, Unit>> signInWithGoogle() async {
       label: 'Error signing in with Google: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to sign in with Google: $error');
+    return left('$error');
   }
 }
 
@@ -162,7 +137,7 @@ Future<Either<String, Unit>> signOut() async {
     return right(unit);
   } catch (error, stackTrace) {
     debugPrintStack(label: 'Error signing out: $error', stackTrace: stackTrace);
-    return left('Failed to sign out: $error');
+    return left('$error');
   }
 }
 
@@ -190,7 +165,7 @@ Future<Either<String, Unit>> reauthenticateWithPassword(
       label: 'Error reauthenticating with password: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to reauthenticate: $error');
+    return left('$error');
   }
 }
 
@@ -201,7 +176,6 @@ Future<Either<String, Unit>> reauthenticateWithGoogle() async {
       return left('No authenticated user.');
     }
     final googleProvider = GoogleAuthProvider();
-    // await user.reauthenticateWithRedirect(googleProvider);
     await user.reauthenticateWithPopup(googleProvider);
     return right(unit);
   } catch (error, stackTrace) {
@@ -209,7 +183,7 @@ Future<Either<String, Unit>> reauthenticateWithGoogle() async {
       label: 'Error reauthenticating with Google: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to reauthenticate with Google: $error');
+    return left('$error');
   }
 }
 
@@ -226,7 +200,7 @@ Future<Either<String, Unit>> changeEmail(String email) async {
       label: 'Error changing email: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to change email: $error');
+    return left('$error');
   }
 }
 
@@ -244,6 +218,6 @@ Future<Either<String, Unit>> deleteUser() async {
       label: 'Error deleting user: $error',
       stackTrace: stackTrace,
     );
-    return left('Failed to delete user: $error');
+    return left('$error');
   }
 }

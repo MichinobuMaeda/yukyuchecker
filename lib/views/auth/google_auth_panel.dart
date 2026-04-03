@@ -19,24 +19,14 @@ class GoogleAuthPanel extends HookConsumerWidget {
       if (reauthentication) {
         final result = await reauthenticateWithGoogle();
         result.match(
-          (error) {
-            debugPrint('Error reauthenticating with Google: $error');
-            message.show("Googleでの再認証に失敗しました。");
-          },
-          (_) {
-            message.show("Googleでの再認証に成功しました。");
-          },
+          (error) => message.show("Googleでの再認証に失敗しました。"),
+          (_) => message.show("Googleでの再認証に成功しました。"),
         );
       } else {
         final result = await signInWithGoogle();
         result.match(
-          (error) {
-            debugPrint('Error signing in with Google: $error');
-            message.show("Googleでのログインに失敗しました。");
-          },
-          (_) {
-            message.show("Googleでのログインに成功しました。");
-          },
+          (error) => message.show("Googleでのログインに失敗しました。"),
+          (_) => message.show("Googleでのログインに成功しました。"),
         );
       }
     }

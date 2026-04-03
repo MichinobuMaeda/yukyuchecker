@@ -3,8 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../config/theme.dart';
-import '../../services/models.dart';
 import '../../services/authentication.dart';
+import '../../services/helpers.dart';
+import '../../models/users.dart';
 import '../../widgets/box_panel.dart';
 
 const _aboutAccountDeletion = 'アカウントを削除するとすべてのデータが失われ、元に戻すことができません。';
@@ -15,26 +16,27 @@ class DeleteUserPanel extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final message = ref.read(snackBarMessageProvider.notifier);
     final confirm = useState(false);
 
     Future<void> handleSubmit() async {
       {
         final uid = ref.read(uidProvider);
         if (uid == null) {
-          debugPrint('No authenticated user.');
+          message.show("認証されたユーザーが見つかりません。");
           return;
         }
         final result = await deleteUserData(uid);
         result.match(
-          (error) => debugPrint('Error deleting user data: $error'),
-          (_) => debugPrint('User data deleted successfully'),
+          (error) => message.show("ユーザーデータの削除に失敗しました。"),
+          (_) => debugPrint("User data deleted successfully."),
         );
       }
       {
         final result = await deleteUser();
         result.match(
-          (error) => debugPrint('Error deleting user: $error'),
-          (_) => debugPrint('User deleted successfully'),
+          (error) => message.show("アカウントの削除に失敗しました。"),
+          (_) => message.show("アカウントを削除しました。"),
         );
       }
     }

@@ -27,13 +27,8 @@ class EmailPasswordPanel extends HookConsumerWidget {
         password.text,
       );
       result.match(
-        (error) {
-          debugPrint('Error signing in with email and password: $error');
-          message.show("ログインに失敗しました。");
-        },
-        (_) {
-          message.show("ログインしました。");
-        },
+        (error) => message.show("ログインに失敗しました。"),
+        (_) => message.show("ログインしました。"),
       );
     }
 

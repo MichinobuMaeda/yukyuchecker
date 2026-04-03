@@ -42,4 +42,23 @@ void main() {
   );
   packageJson.writeAsStringSync(updatedPackageJson);
   stdout.writeln('Set version to "$semver" in package.json');
+
+  final envFile = File('functions/.env');
+  if (!envFile.existsSync()) {
+    stderr.writeln('Error: functions/.env not found.');
+    exitCode = 1;
+    return;
+  }
+
+  final envLines = envFile.readAsLinesSync();
+  final uiVersionIndex = envLines.indexWhere(
+    (line) => line.startsWith('UI_VERSION='),
+  );
+  if (uiVersionIndex >= 0) {
+    envLines[uiVersionIndex] = 'UI_VERSION=$version';
+  } else {
+    envLines.add('UI_VERSION=$version');
+  }
+  envFile.writeAsStringSync('${envLines.join('\n')}\n');
+  stdout.writeln('Set UI_VERSION to "$version" in functions/.env');
 }

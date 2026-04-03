@@ -10,7 +10,7 @@
 
 ## 開発・運用
 
-[» 開発](./development.md)
+[» Development](./development.md)
 
 有休チェッカーは現在、個人で開発・運用しています。ご要望等は
 <https://pages.michinobu.jp>
